@@ -935,7 +935,7 @@ class ApiAutomator:
         )
 
         perms_added = len(entries)
-        if 'Failures' in response:
+        if response['Failures']:
             perms_added -= len(response.get('Failures'))
 
         if perms_added == 0:
