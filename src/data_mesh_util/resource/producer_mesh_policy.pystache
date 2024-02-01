@@ -74,7 +74,8 @@
             "Effect": "Allow",
             "Action": [
                 "ram:CreateResourceShare",
-                "ram:GetResourceShares"
+                "ram:GetResourceShares",
+                "ram:AssociateResourceShare"
             ],
             "Resource": "*"
         },
