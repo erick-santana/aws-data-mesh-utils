@@ -17,7 +17,13 @@ class DataMeshMacros:
         if self._log_level == 'DEBUG':
             utils.log_instance_signature(self, self._logger)
 
-    def bootstrap_account(self, account_type: str, mesh_credentials, account_credentials, crawler_role_arn: str = None):
+    def bootstrap_account(
+            self,
+            account_type: str,
+            mesh_credentials,
+            account_credentials,
+            account_id: str = None
+    ):
         # create a data mesh admin for the mesh account
         mesh_admin = data_mesh_admin.DataMeshAdmin(
             data_mesh_account_id=self._data_mesh_account_id,
@@ -36,9 +42,9 @@ class DataMeshMacros:
 
         if account_type.lower() == PRODUCER.lower() or account_type.lower() == self._BOTH.lower():
             account_admin.initialize_producer_account()
-            mesh_admin.enable_account_as_producer(account_id=account_credentials.get('AccountId'))
+            mesh_admin.enable_account_as_producer(account_id=account_id)
         elif account_type.lower() == CONSUMER.lower() or account_type.lower() == self._BOTH.lower():
             account_admin.initialize_consumer_account()
-            mesh_admin.enable_account_as_consumer(account_id=account_credentials.get('AccountId'))
+            mesh_admin.enable_account_as_consumer(account_id=account_id)
         else:
             raise Exception(f"Unknown Account Type {account_type}")
