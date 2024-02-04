@@ -16,5 +16,6 @@ if __name__ == '__main__':
     mesh_macros.bootstrap_account(
         account_type=CONSUMER,
         mesh_credentials=mesh_session.get_credentials(),
-        account_credentials=consumer_session.get_credentials()
+        account_credentials=consumer_session.get_credentials(),
+        account_id=consumer_session.client('sts').get_caller_identity().get('Account')
     )
