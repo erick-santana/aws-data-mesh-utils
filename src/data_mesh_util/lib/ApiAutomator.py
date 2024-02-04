@@ -58,7 +58,10 @@ class ApiAutomator:
         trust_role_name = utils.get_role_arn(account_id=account_id_to_trust, role_name=trust_role_name)
         # add the account to the trust relationship
         trusted_entities = policy_doc.get('Statement')[0].get('Principal').get('AWS')
-        if account_id_to_trust not in trusted_entities:
+        # exclude principals that not initiated with 'arn...'
+        trusted_entities = list(filter(lambda entity: entity.startswith('arn'), trusted_entities))
+        account_id_in_trust = next(filter(lambda entity: account_id_to_trust in entity, trusted_entities), None)
+        if account_id_in_trust is None:
             trusted_entities.append(trust_role_name)
             policy_doc.get('Statement')[0].get('Principal')['AWS'] = trusted_entities
 
