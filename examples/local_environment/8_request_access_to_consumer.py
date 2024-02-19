@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     owner_account_id = producer_account
     database_name = f'data_mesh-{producer_account}'
-    tables = 'data_mesh_table'
+    tables = ['data_mesh_table']
     request_permissions = ['SELECT', 'DESCRIBE']
 
     subscription = data_mesh_consumer.request_access_to_product(

@@ -450,8 +450,7 @@ class ApiAutomator:
 
         self._logger.info(f"Create {partitions_created} new Table Partitions")
 
-    def load_glue_tables(self, catalog_id: str, source_db_name: str,
-                         table_name_regex: str, load_lf_tags: bool = True):
+    def load_glue_tables(self, catalog_id: str, source_db_name: str, load_lf_tags: bool = True):
         glue_client = self._get_client('glue')
         lf_client = self._get_client('lakeformation')
 
@@ -461,17 +460,12 @@ class ApiAutomator:
             'DatabaseName': source_db_name
         }
 
-        # add the table filter as a regex matching anything including the provided table
-        if table_name_regex is not None:
-            get_tables_args['Expression'] = table_name_regex
-
         finished_reading = False
         last_token = None
         all_tables = []
 
         def _no_data():
-            raise Exception("Unable to find any Tables matching %s in Database %s" % (table_name_regex,
-                                                                                      source_db_name))
+            raise Exception("Unable to find any Tables in Database %s" % source_db_name)
 
         while finished_reading is False:
             if last_token is not None:
@@ -481,8 +475,8 @@ class ApiAutomator:
                 get_table_response = glue_client.get_tables(
                     **get_tables_args
                 )
-            except glue_client.exceptions.EntityNotFoundException:
-                _no_data()
+            except Exception as e:
+                raise e
 
             if 'NextToken' in get_table_response:
                 last_token = get_table_response.get('NextToken')
@@ -495,7 +489,7 @@ class ApiAutomator:
             else:
                 all_tables.extend(get_table_response.get('TableList'))
 
-        self._logger.info(f"Loaded {len(all_tables)} tables matching {table_name_regex} from Glue")
+        self._logger.info(f"Loaded {len(all_tables)} tables from Glue")
 
         # now load all lakeformation tags for the supplied objects
         if load_lf_tags is True:

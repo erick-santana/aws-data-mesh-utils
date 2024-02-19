@@ -12,10 +12,8 @@ if __name__ == '__main__':
     )
 
     database_name = 'data_mesh'
-    table_name_regex = '[A-Za-z0-9]*'
 
     data_mesh_producer.create_data_products(
         source_database_name=database_name,
-        table_name_regex=table_name_regex,
         create_public_metadata=True
     )

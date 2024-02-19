@@ -225,7 +225,6 @@ class DataMeshProducer:
 
     def create_data_products(self, source_database_name: str,
                              create_public_metadata: bool = True,
-                             table_name_regex: str = None,
                              domain: str = None,
                              data_product_name: str = None,
                              sync_mesh_catalog_schedule: str = None,
@@ -253,8 +252,7 @@ class DataMeshProducer:
         # load the specified tables to be created as data products
         all_tables = self._producer_automator.load_glue_tables(
             catalog_id=self._data_producer_account_id,
-            source_db_name=source_database_name,
-            table_name_regex=table_name_regex
+            source_db_name=source_database_name
         )
 
         # get or create the target database exists in the mesh account
@@ -496,7 +494,6 @@ class DataMeshProducer:
             all_tables = self._producer_automator.load_glue_tables(
                 catalog_id=self._data_producer_account_id,
                 source_db_name=original_db,
-                table_name_regex=t,
                 load_lf_tags=False
             )
 
